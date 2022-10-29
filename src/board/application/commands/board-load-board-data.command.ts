@@ -1,3 +1,3 @@
-import { Command } from '../../../core/eda';
+import { Command } from '../../../infrastructure/eda';
 
 export class BoardLoadBoardDataCommand extends Command {}

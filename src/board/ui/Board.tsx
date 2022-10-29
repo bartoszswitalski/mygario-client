@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { createPixiApplication, getPIXIApp } from 'pixi/pixi-application';
 import { useAuth } from '../../auth/useAuth';
-import { applicationBus, commandBus } from '../../core/eda';
+import { applicationBus, commandBus } from '../../infrastructure/eda';
 import { BoardLoadBoardDataCommand } from '../application/commands/board-load-board-data.command';
 import { BoardDestroyedEvent } from '../../core/events/board-destroyed.event';
 import { BoardUserLoggedInEvent } from '../../core/events/board-user-logged-in.event';
 import { BoardUserLoggedOutEvent } from '../../core/events/board-user-logged-out.event';
+import { BoardLoadedEvent } from '../../core/events/board-loaded.event';
 
 export const Board = () => {
     const { isLoggedIn } = useAuth();
@@ -15,6 +16,7 @@ export const Board = () => {
         const PIXIApp = getPIXIApp();
         document.body.appendChild(PIXIApp.view);
 
+        applicationBus.dispatch(new BoardLoadedEvent());
         commandBus.dispatch(new BoardLoadBoardDataCommand());
 
         return () => {

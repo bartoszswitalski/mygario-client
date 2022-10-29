@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { useInjector } from 'core/injection';
+import { useInjector } from 'infrastructure/injection';
 import {
     APPLICATION_EVENT_HANDLERS_REGISTRY,
     ApplicationEventHandlersRegistry,
     COMMAND_HANDLERS_REGISTRY,
     CommandHandlersRegistry,
-} from 'core/eda';
+} from 'infrastructure/eda';
 import { Board } from 'board/ui/Board';
 import { getBoardCommandHandlers } from './board/board.command-handlers';
 import { getWidgetsEventHandlers } from './widgets/widgets.event-handlers';

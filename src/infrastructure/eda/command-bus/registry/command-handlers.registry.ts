@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
-import { CommandHandler } from 'core/eda/command-bus/command-bus.model';
-import { commandBus } from 'core/eda/command-bus/command-bus';
-import { InjectionToken } from 'core/injection';
+import { CommandHandler } from 'infrastructure/eda/command-bus/command-bus.model';
+import { commandBus } from 'infrastructure/eda/command-bus/command-bus';
+import { InjectionToken } from 'infrastructure/injection';
 
 export class CommandHandlersRegistry {
     #subscriptions: Subscription = new Subscription();

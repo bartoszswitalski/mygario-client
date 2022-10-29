@@ -1,6 +1,6 @@
-import { InjectionToken, Injector } from '../../core/injection';
+import { InjectionToken, Injector } from '../../infrastructure/injection';
 import { Blueprint } from '../domain/blueprint.model';
-import { RawWidgetData } from '../../core/types/raw-widget-data';
+import { RawWidgetData } from './raw-widget-data';
 import { switchCase } from '../../shared/utils';
 import { WidgetType } from '../../core/types/widget-type';
 import { Class } from '../../core/types/class';
@@ -8,7 +8,7 @@ import { RenderableFeature } from '../widget/widget.model';
 import { TransformFeature } from '../ui/features/transform.feature';
 import { ZIndexFeature } from '../ui/features/z-index.feature';
 import { PelletFeature } from '../ui/features/pellet.feature';
-import { pelletComponents } from './pellet.components';
+import { pelletComponents } from './components/pellet.components';
 
 export class WidgetsFactory {
     constructor(private readonly injector: Injector) {}

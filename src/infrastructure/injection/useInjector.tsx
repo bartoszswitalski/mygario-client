@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useMemo } from 'react';
-import { InjectionToken } from 'core/injection/injection-token';
-import { Injector } from 'core/injection/injector';
+import { InjectionToken } from 'infrastructure/injection/injection-token';
+import { Injector } from 'infrastructure/injection/injector';
 
 type DependenciesProviderProps = {
     providers?: { provide: InjectionToken; useValue: unknown }[];

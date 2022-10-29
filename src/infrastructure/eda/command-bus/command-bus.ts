@@ -1,5 +1,5 @@
 import { Observable, Subject } from 'rxjs';
-import { Command } from 'core/eda/command-bus/command-bus.model';
+import { Command } from 'infrastructure/eda/command-bus/command-bus.model';
 import { filter } from 'rxjs/operators';
 import { Class } from 'core/types/class';
 

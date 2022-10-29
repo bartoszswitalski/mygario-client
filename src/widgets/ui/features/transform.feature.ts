@@ -2,7 +2,7 @@ import { RenderableFeature, WidgetFeatures } from '../../widget/widget.model';
 import { Widget } from '../../widget/widget';
 import { TransformQuery } from '../../application/query/transform.query';
 import { takeUntil } from 'rxjs';
-import { applicationBus } from '../../../core/eda';
+import { applicationBus } from '../../../infrastructure/eda';
 import { BoardDestroyedEvent } from '../../../core/events/board-destroyed.event';
 
 export class TransformFeature implements RenderableFeature {

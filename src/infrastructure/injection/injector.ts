@@ -1,4 +1,4 @@
-import { InjectionToken } from 'core/injection/injection-token';
+import { InjectionToken } from 'infrastructure/injection/injection-token';
 
 type Provider = { provide: InjectionToken; useValue: unknown };
 

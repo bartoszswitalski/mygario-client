@@ -1,4 +1,4 @@
-import { ApplicationEvent } from '../eda';
+import { ApplicationEvent } from '../../infrastructure/eda';
 
 export class BoardCursorMovedEvent extends ApplicationEvent {
     constructor(

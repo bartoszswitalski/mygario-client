@@ -1,5 +1,9 @@
 import { getMainPIXIContainer, getPIXIApp } from '../pixi/pixi-application';
-import { Coords } from '../core/types/coords';
+
+type Coords = {
+    x: number;
+    y: number;
+};
 
 class Camera {
     setPosition(x: number, y: number, scale: number): void {

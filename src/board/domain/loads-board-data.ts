@@ -1,4 +1,4 @@
-import { InjectionToken } from '../../core/injection';
+import { InjectionToken } from '../../infrastructure/injection';
 
 export interface LoadsBoardData {
     load(): Promise<void>;

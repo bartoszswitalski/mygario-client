@@ -1,4 +1,4 @@
-import { Command } from '../../../core/eda';
+import { Command } from '../../../infrastructure/eda';
 import { uuid } from '../../../core/types/uuid';
 
 export class WidgetsPlayerMoveCommand extends Command {

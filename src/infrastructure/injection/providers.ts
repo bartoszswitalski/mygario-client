@@ -1,6 +1,6 @@
 import { InjectionToken } from './injection-token';
 import { Injector } from './injector';
-import { Class } from '../types/class';
+import { Class } from '../../core/types/class';
 
 export function withProviders<T>(
     ClassToApplyProviders: Class<T>,

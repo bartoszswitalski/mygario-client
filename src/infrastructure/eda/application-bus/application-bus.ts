@@ -1,6 +1,6 @@
 import { Observable, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ApplicationEvent } from 'core/eda/application-bus/application-bus.model';
+import { ApplicationEvent } from 'infrastructure/eda/application-bus/application-bus.model';
 import { Class } from 'core/types/class';
 
 class ApplicationBus {

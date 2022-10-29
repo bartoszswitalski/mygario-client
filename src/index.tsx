@@ -1,13 +1,13 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from 'App';
-import { DependenciesProvider } from 'core/injection';
+import { DependenciesProvider } from 'infrastructure/injection';
 import {
     APPLICATION_EVENT_HANDLERS_REGISTRY,
     ApplicationEventHandlersRegistry,
     COMMAND_HANDLERS_REGISTRY,
     CommandHandlersRegistry,
-} from 'core/eda';
+} from 'infrastructure/eda';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from 'react-query';

@@ -1,4 +1,4 @@
-import { ApplicationEventHandler, commandBus } from '../../core/eda';
+import { ApplicationEventHandler, commandBus } from '../../infrastructure/eda';
 import { BoardCursorMovedEvent } from '../../core/events/board-cursor-moved.event';
 import { WidgetsPlayerMoveCommand } from '../application/command/widgets-player-move.command';
 import { getPIXIApp } from '../../pixi/pixi-application';

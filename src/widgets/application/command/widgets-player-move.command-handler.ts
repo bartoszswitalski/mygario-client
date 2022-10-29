@@ -1,4 +1,4 @@
-import { CommandHandler } from '../../../core/eda';
+import { CommandHandler } from '../../../infrastructure/eda';
 import { WidgetsPlayerMoveCommand } from './widgets-player-move.command';
 import {
     componentsDataAggregate,

@@ -1,4 +1,4 @@
-import { ApplicationEventHandler, commandBus } from '../../core/eda';
+import { ApplicationEventHandler, commandBus } from '../../infrastructure/eda';
 import { BoardDestroyedEvent } from '../../core/events/board-destroyed.event';
 import { WidgetsDisposeStoragesCommand } from '../../widgets/application/command/widgets-dispose-storages.command';
 

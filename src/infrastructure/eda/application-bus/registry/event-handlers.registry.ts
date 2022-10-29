@@ -1,7 +1,7 @@
 import { combineLatest, Subscription } from 'rxjs';
-import { applicationBus } from 'core/eda/application-bus/application-bus';
-import { ApplicationEventHandler } from 'core/eda/application-bus/application-bus.model';
-import { InjectionToken } from 'core/injection/injection-token';
+import { applicationBus } from 'infrastructure/eda/application-bus/application-bus';
+import { ApplicationEventHandler } from 'infrastructure/eda/application-bus/application-bus.model';
+import { InjectionToken } from 'infrastructure/injection/injection-token';
 
 export class ApplicationEventHandlersRegistry {
     #subscriptions: Subscription = new Subscription();

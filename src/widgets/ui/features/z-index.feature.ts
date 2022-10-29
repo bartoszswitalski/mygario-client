@@ -2,7 +2,7 @@ import { RenderableFeature, WidgetFeatures } from '../../widget/widget.model';
 import { Widget } from '../../widget/widget';
 import { ZIndexQuery } from '../../application/query/z-index.query';
 import { delay, takeUntil } from 'rxjs';
-import { applicationBus } from '../../../core/eda';
+import { applicationBus } from '../../../infrastructure/eda';
 import { BoardDestroyedEvent } from '../../../core/events/board-destroyed.event';
 
 export class ZIndexFeature implements RenderableFeature {

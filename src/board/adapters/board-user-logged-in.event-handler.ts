@@ -1,10 +1,11 @@
-import { applicationBus, ApplicationEventHandler, commandBus } from '../../core/eda';
+import { applicationBus, ApplicationEventHandler, commandBus } from '../../infrastructure/eda';
 import { BoardUserLoggedInEvent } from '../../core/events/board-user-logged-in.event';
 import { getPIXIApp } from '../../pixi/pixi-application';
 import { BoardCursorMovedEvent } from '../../core/events/board-cursor-moved.event';
-import { WidgetsCameraFollowPlayerCommand } from '../../widgets/application/command/widgets-camera-follow-player.command';
+import { WidgetsCameraFollowUserCommand } from '../../widgets/application/command/widgets-camera-follow-user.command';
 import { authStore } from '../../store/store';
 import { uuid } from '../../core/types/uuid';
+import { WidgetsInitializeUserCommand } from '../../widgets/application/command/widgets-initialize-user.command';
 
 export class BoardUserLoggedInEventHandler implements ApplicationEventHandler {
     eventsClasses = [BoardUserLoggedInEvent];
@@ -17,6 +18,7 @@ export class BoardUserLoggedInEventHandler implements ApplicationEventHandler {
         });
 
         const { userId } = authStore.getState();
-        commandBus.dispatch(new WidgetsCameraFollowPlayerCommand({ playerId: userId as uuid }));
+        commandBus.dispatch(new WidgetsInitializeUserCommand({ playerId: userId as uuid }));
+        commandBus.dispatch(new WidgetsCameraFollowUserCommand({ playerId: userId as uuid }));
     }
 }

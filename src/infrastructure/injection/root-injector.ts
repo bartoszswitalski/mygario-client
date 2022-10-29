@@ -1,4 +1,4 @@
-import { Class } from '../types/class';
+import { Class } from '../../core/types/class';
 import { withProviders } from './providers';
 import { InjectionToken } from './injection-token';
 

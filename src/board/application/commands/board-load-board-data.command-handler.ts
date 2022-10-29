@@ -1,9 +1,9 @@
-import { CommandHandler } from '../../../core/eda';
+import { CommandHandler } from '../../../infrastructure/eda';
 import { BoardLoadBoardDataCommand } from './board-load-board-data.command';
 import { widgetsAggregate } from '../../../infrastructure/aggregate/widgets.aggregate';
 import { Blueprint } from '../../../widgets/domain/blueprint.model';
 import { WIDGETS_FACTORY, WidgetsFactory } from '../../../widgets/infrastructure/widgets.factory';
-import { Injector } from '../../../core/injection';
+import { Injector } from '../../../infrastructure/injection';
 import { WidgetType } from '../../../core/types/widget-type';
 import { createWidget } from '../../../widgets/widget/widget';
 

@@ -1,4 +1,4 @@
-import { ApplicationEventHandler } from '../../core/eda';
+import { ApplicationEventHandler } from '../../infrastructure/eda';
 import { BoardUserLoggedOutEvent } from '../../core/events/board-user-logged-out.event';
 
 export class BoardUserLoggedOutEventHandler implements ApplicationEventHandler {

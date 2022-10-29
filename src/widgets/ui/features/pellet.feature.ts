@@ -3,7 +3,7 @@ import { Widget } from '../../widget/widget';
 import { combineLatest, takeUntil } from 'rxjs';
 import { SizeQuery } from '../../application/query/size.query';
 import { ColorQuery } from '../../application/query/color.query';
-import { applicationBus } from '../../../core/eda';
+import { applicationBus } from '../../../infrastructure/eda';
 import { BoardDestroyedEvent } from '../../../core/events/board-destroyed.event';
 import { Graphics } from 'pixi.js';
 

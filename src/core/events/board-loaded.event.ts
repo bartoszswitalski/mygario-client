@@ -1,3 +1,3 @@
 import { ApplicationEvent } from '../../infrastructure/eda';
 
-export class BoardDestroyedEvent extends ApplicationEvent {}
+export class BoardLoadedEvent extends ApplicationEvent {}

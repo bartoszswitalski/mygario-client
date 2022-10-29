@@ -1,6 +1,6 @@
 import { WidgetsDisposeStoragesCommand } from './widgets-dispose-storages.command';
-import { CommandHandler } from '../../../core/eda';
-import { Injector } from '../../../core/injection';
+import { CommandHandler } from '../../../infrastructure/eda';
+import { Injector } from '../../../infrastructure/injection';
 import { widgetsAggregate } from '../../../infrastructure/aggregate/widgets.aggregate';
 import { componentsDataAggregate } from '../../../infrastructure/aggregate/component-data.aggregate';
 
