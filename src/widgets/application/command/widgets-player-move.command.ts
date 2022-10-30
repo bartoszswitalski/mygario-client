@@ -7,6 +7,7 @@ export class WidgetsPlayerMoveCommand extends Command {
             playerId: uuid;
             x: number;
             y: number;
+            playerSize: number;
         },
     ) {
         super();

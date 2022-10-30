@@ -11,6 +11,9 @@ import {
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:3001/';
 
 const container: HTMLElement = document.getElementById('app') as HTMLElement;
 const root = createRoot(container);

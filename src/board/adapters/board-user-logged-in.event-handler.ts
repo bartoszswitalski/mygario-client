@@ -17,8 +17,8 @@ export class BoardUserLoggedInEventHandler implements ApplicationEventHandler {
             applicationBus.dispatch(new BoardCursorMovedEvent({ x, y }));
         });
 
-        const { userId } = authStore.getState();
-        commandBus.dispatch(new WidgetsInitializeUserCommand({ playerId: userId as uuid }));
-        commandBus.dispatch(new WidgetsCameraFollowUserCommand({ playerId: userId as uuid }));
+        const { userName } = authStore.getState();
+        commandBus.dispatch(new WidgetsInitializeUserCommand({ playerId: userName as uuid }));
+        commandBus.dispatch(new WidgetsCameraFollowUserCommand({ playerId: userName as uuid }));
     }
 }

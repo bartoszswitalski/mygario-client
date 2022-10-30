@@ -14,18 +14,28 @@ export class WidgetsBoardCursorMovedEventHandler implements ApplicationEventHand
     private static readonly VELOCITY_BORDER_RADIUS_MULTIPLE = 3;
 
     handle([event]: BoardCursorMovedEvent[]): void {
-        const { userId } = authStore.getState();
+        const { userName } = authStore.getState();
         const { x: playerX, y: playerY } = componentsDataAggregate.getComponentData(
             WidgetComponentData.Transform,
-            userId as uuid,
+            userName as uuid,
         );
-        const { size: playerSize } = componentsDataAggregate.getComponentData(WidgetComponentData.Size, userId as uuid);
+        const { size: playerSize } = componentsDataAggregate.getComponentData(
+            WidgetComponentData.Size,
+            userName as uuid,
+        );
 
         const { directionAngle, playerVelocity } = this._getMoveParams(event.payload.x, event.payload.y, playerSize);
-        const newPlayerX = this._getNewX(playerX, playerVelocity, directionAngle);
-        const newPlayerY = this._getNewY(playerY, playerVelocity, directionAngle);
+        const newPlayerX = this._getNewX(playerX, directionAngle, playerVelocity);
+        const newPlayerY = this._getNewY(playerY, directionAngle, playerVelocity);
 
-        commandBus.dispatch(new WidgetsPlayerMoveCommand({ x: newPlayerX, y: newPlayerY, playerId: userId as uuid }));
+        commandBus.dispatch(
+            new WidgetsPlayerMoveCommand({
+                x: newPlayerX,
+                y: newPlayerY,
+                playerId: userName as uuid,
+                playerSize,
+            }),
+        );
     }
 
     private _getMoveParams(

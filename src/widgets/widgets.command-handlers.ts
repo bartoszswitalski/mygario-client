@@ -7,8 +7,15 @@ import { WidgetsPlayerMoveCommandHandler } from './application/command/widgets-p
 import { WidgetsInitializeUserCommandHandler } from './application/command/widgets-initialize-user.command-handler';
 import { WidgetsLoadPelletsCommandHandler } from './application/command/widgets-load-pellets.command-handler';
 import { WidgetsLoadPlayersCommandHandler } from './application/command/widgets-load-players.command-handler';
+import { WIDGETS_FACTORY, WidgetsFactory } from './infrastructure/widgets.factory';
+import { withRootProviders } from '../infrastructure/injection/root-injector';
 
-const handlerProviders: { provide: InjectionToken; useValue: unknown }[] = [];
+const handlerProviders: { provide: InjectionToken; useValue: unknown }[] = [
+    {
+        provide: WIDGETS_FACTORY,
+        useValue: withRootProviders(WidgetsFactory),
+    },
+];
 
 const widgetsCommandHandlers = [
     WidgetsDisposeStoragesCommandHandler,

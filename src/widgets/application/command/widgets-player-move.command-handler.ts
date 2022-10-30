@@ -11,9 +11,7 @@ export class WidgetsPlayerMoveCommandHandler implements CommandHandler {
     command = WidgetsPlayerMoveCommand;
 
     handle(command: WidgetsPlayerMoveCommand): void {
-        const { x: playerX, y: playerY, playerId } = command.payload;
-        const { size: playerSize } = componentsDataAggregate.getComponentData(WidgetComponentData.Size, playerId);
-
+        const { x: playerX, y: playerY, playerId, playerSize } = command.payload;
         const newX = clamp(X_MIN + playerSize, X_MAX - playerSize)(playerX);
         const newY = clamp(Y_MIN + playerSize, Y_MAX - playerSize)(playerY);
 
