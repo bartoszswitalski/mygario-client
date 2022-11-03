@@ -4,7 +4,7 @@ import { applicationBus } from '../../infrastructure/eda';
 import { BoardDestroyedEvent } from '../../core/events/board-destroyed.event';
 import { BoardLoadedEvent } from '../../core/events/board-loaded.event';
 import { LoginModal } from './LoginModal';
-import { BoardUserLoggedOutEvent } from '../../core/events/board-user-logged-out.event';
+import { UserLoggedOutEvent } from '../../core/events/user-logged-out.event';
 
 export const Board = () => {
     useEffect(() => {
@@ -15,7 +15,7 @@ export const Board = () => {
         applicationBus.dispatch(new BoardLoadedEvent());
 
         return () => {
-            applicationBus.dispatch(new BoardUserLoggedOutEvent());
+            applicationBus.dispatch(new UserLoggedOutEvent());
             applicationBus.dispatch(new BoardDestroyedEvent());
             PIXIApp.destroy(true, {
                 children: true,

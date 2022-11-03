@@ -15,7 +15,7 @@ import { InputControl } from 'formik-chakra-ui';
 import Yup from '../../shared/yup';
 import { useEffect } from 'react';
 import { applicationBus } from '../../infrastructure/eda';
-import { BoardUserLoggedInEvent } from '../../core/events/board-user-logged-in.event';
+import { UserLoggedInEvent } from '../../core/events/user-logged-in.event';
 
 export const userNameValidationSchema = Yup.object({
     userName: Yup.string().required().min(5).max(20),
@@ -36,7 +36,7 @@ export const LoginModal = () => {
     useEffect(() => {
         if (loginMutation.isSuccess) {
             onClose();
-            applicationBus.dispatch(new BoardUserLoggedInEvent());
+            applicationBus.dispatch(new UserLoggedInEvent());
         }
     }, [loginMutation.isSuccess]);
 

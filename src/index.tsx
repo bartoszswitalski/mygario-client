@@ -13,7 +13,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'http://localhost:3001/';
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND ?? 'http://localhost:3001/';
 
 const container: HTMLElement = document.getElementById('app') as HTMLElement;
 const root = createRoot(container);
