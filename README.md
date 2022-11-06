@@ -1,59 +1,79 @@
-This project was bootstrapped with
-[Create React App](https://github.com/facebook/create-react-app).
+# mygario-client
 
-## Available Scripts
+Realtime multiplayer game inspired by a popular web application [agar.io](https://agar.io/).
 
-In the project directory, you can run:
+## Table of Contents
 
-### `yarn start`
+* [General Info](#general-information)
+* [Technologies Used](#technologies-used)
+* [Features](#features)
+* [Screenshots](#screenshots)
+* [Setup](#setup)
+* [Usage](#usage)
+* [Project Status](#project-status)
+* [Room for Improvement](#room-for-improvement)
+* [Acknowledgements](#acknowledgements)
+* [Contact](#contact)
 
-Runs the app in the development mode.<br /> Open
-[http://localhost:3000](http://localhost:3000) to view it in the browser.
+## General Information
 
-The page will reload if you make edits.<br /> You will also see any lint errors
-in the console.
+- Application is written in [React.js](https://reactjs.org/), a JavaScript library for building user interfaces.
+- The purpose of this project is to learn how to design and build scalable realtime web applications in
+  the [Event Driven
+  Architecture](https://martinfowler.com/articles/201701-event-driven.html)
+  using [CQRS](https://martinfowler.com/bliki/CQRS.html) approach.
 
-### `yarn test`
+## Technologies Used
 
-Launches the test runner in the interactive watch mode.<br /> See the section
-about
-[running tests](https://facebook.github.io/create-react-app/docs/running-tests)
-for more information.
+- Node.js
+- React.js
+- [PixiJS](https://pixijs.com/)
+- gh-actions (CI/CD)
 
-### `yarn build`
+## Features
 
-Builds the app for production to the `build` folder.<br /> It correctly bundles
-React in production mode and optimizes the build for the best performance.
+- Multiplayer game
+- Realtime communication between server and clients
 
-The build is minified and the filenames include the hashes.<br /> Your app is
-ready to be deployed!
+## Screenshots
 
-See the section about
-[deployment](https://facebook.github.io/create-react-app/docs/deployment) for
-more information.
+todo
+[//]: # (![todo]&#40;./img/screenshot.png&#41;)
 
-### `yarn eject`
+## Setup
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Environment requirements:
 
-If you aren’t satisfied with the build tool and configuration choices, you can
-`eject` at any time. This command will remove the single build dependency from
-your project.
+* Node.js 18 or higher
 
-Instead, it will copy all the configuration files and the transitive
-dependencies (webpack, Babel, ESLint, etc) right into your project so you have
-full control over them. All of the commands except `eject` will still work, but
-they will point to the copied scripts so you can tweak them. At this point
-you’re on your own.
+```bash
+# To run this project, first install its dependencies:
+yarn
+# Then run the app:
+yarn start
 
-You don’t have to ever use `eject`. The curated feature set is suitable for
-small and middle deployments, and you shouldn’t feel obligated to use this
-feature. However we understand that this tool wouldn’t be useful if you couldn’t
-customize it when you are ready for it.
+# by default the app runs on port 3000
+```
 
-## Learn More
+## Usage
 
-You can learn more in the
-[Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+* The application is deployed [here](http://mygario.bswitalski.io/).
+* I've used [Vercel](https://vercel.com/) for handling deployments.
+* CI/CD for this project is configured so that with each push to the main branch, the application is automatically
+  deployed.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Project Status
+
+Project is: _in progress_ / ~~_complete_~~ / ~~_no longer being worked on_~~.
+
+## Room for Improvement
+
+todo: add when complete
+
+## Acknowledgements
+
+- This project was inspired by [@szymeo](https://github.com/szymeo) EDA & CQRS system design.
+
+## Contact
+
+Created by [@bartoszswitalski](https://github.com/bartoszswitalski)
