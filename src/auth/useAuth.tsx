@@ -16,7 +16,8 @@ export function useAuth() {
     const toast = useToast();
 
     const login = async (userName: string) => {
-        const loginResponse = await axios.post('/auth/login', { userName: userName });
+        const loginResponse = await axios.post('auth/login', { userName: userName });
+
         return { userName, token: loginResponse.data.token };
     };
 

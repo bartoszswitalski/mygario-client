@@ -1,6 +1,6 @@
-import { ApplicationEvent } from '../../infrastructure/eda';
+import { Command } from '../../../infrastructure/eda';
 
-export class PlayerAddedEvent extends ApplicationEvent {
+export class WidgetsPlayerCreateCommand extends Command {
     constructor(
         public readonly payload: {
             userName: string;

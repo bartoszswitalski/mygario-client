@@ -16,7 +16,7 @@ const eventProviders = [
     },
     {
         provide: WEBSOCKET_SERVICE_URL,
-        useValue: 'http://localhost:3000/',
+        useValue: 'http://localhost:3001/',
     },
 ];
 

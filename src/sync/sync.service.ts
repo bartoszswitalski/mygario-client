@@ -9,10 +9,10 @@ import { WebsocketService } from './model/websocket-service.model';
 import { SyncService } from './model/sync-service.model';
 
 export let syncService: WssSyncService;
-export const createSyncService = (token: string, baseUrl: string): SyncService => new WssSyncService(token, baseUrl);
+export const createSyncService = (token: string, baseUrl: string) => (syncService = new WssSyncService(token, baseUrl));
 
 class WssSyncService implements SyncService, WebsocketService {
-    #socket: Socket;
+    readonly #socket: Socket;
 
     constructor(token: string, baseUrl: string) {
         this.#socket = io(baseUrl, {

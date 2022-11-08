@@ -9,9 +9,9 @@ export class WidgetsPlayerGrowCommandHandler implements CommandHandler {
     command = WidgetsPlayerGrowCommand;
 
     handle(command: WidgetsPlayerGrowCommand): void {
-        const { playerId, playerSize } = command.payload;
+        const { userName, playerSize } = command.payload;
 
-        componentsDataAggregate.setComponentData(WidgetComponentData.Size, playerId, {
+        componentsDataAggregate.setComponentData(WidgetComponentData.Size, userName, {
             size: playerSize,
         });
     }

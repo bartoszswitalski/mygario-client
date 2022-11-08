@@ -20,22 +20,25 @@ export const listenSyncMessages = (): void => {
 };
 
 const handleNewPlayer = (payload: NewPlayerToClientPayload): void => {
-    const { playerId } = payload.socketData;
-    applicationBus.dispatch(new PlayerAddedEvent({ playerId }));
+    console.log('WS New player', payload);
+    applicationBus.dispatch(new PlayerAddedEvent(payload));
 };
 
 const handleMovePlayer = (payload: MovePlayerToClientPayload): void => {
-    const { playerId, playerTransform, playerSize } = payload.socketData;
+    const { userName, playerTransform, playerSize } = payload;
     const { x, y } = playerTransform;
-    applicationBus.dispatch(new PlayerMovedEvent({ playerId, x, y, playerSize }));
+    // console.log('WS Move player', userName, x, y, playerSize);
+    applicationBus.dispatch(new PlayerMovedEvent({ userName, x, y, playerSize }));
 };
 
 const handleGrowPlayer = (payload: GrowPlayerToClientPayload): void => {
-    const { playerId, playerSize } = payload.socketData;
-    applicationBus.dispatch(new PlayerGrewEvent({ playerId, playerSize }));
+    const { userName, playerSize } = payload;
+    console.log('WS Grow player', userName, playerSize);
+    applicationBus.dispatch(new PlayerGrewEvent({ userName, playerSize }));
 };
 
 const handleRemovePlayer = (payload: RemovePlayerToClientPayload): void => {
-    const { playerId } = payload.socketData;
-    applicationBus.dispatch(new PlayerRemovedEvent({ playerId }));
+    const { userName } = payload;
+    console.log('WS Remove player', userName);
+    applicationBus.dispatch(new PlayerRemovedEvent({ userName }));
 };

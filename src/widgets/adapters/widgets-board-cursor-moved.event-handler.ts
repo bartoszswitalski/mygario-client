@@ -4,7 +4,6 @@ import { WidgetsPlayerMoveCommand } from '../application/command/widgets-player-
 import { getPIXIApp } from '../../pixi/pixi-application';
 import { componentsDataAggregate, WidgetComponentData } from '../../infrastructure/aggregate/component-data.aggregate';
 import { authStore } from '../../store/store';
-import { uuid } from '../../core/types/uuid';
 
 export class WidgetsBoardCursorMovedEventHandler implements ApplicationEventHandler {
     eventsClasses = [BoardCursorMovedEvent];
@@ -17,11 +16,11 @@ export class WidgetsBoardCursorMovedEventHandler implements ApplicationEventHand
         const { userName } = authStore.getState();
         const { x: playerX, y: playerY } = componentsDataAggregate.getComponentData(
             WidgetComponentData.Transform,
-            userName as uuid,
+            userName as string,
         );
         const { size: playerSize } = componentsDataAggregate.getComponentData(
             WidgetComponentData.Size,
-            userName as uuid,
+            userName as string,
         );
 
         const { directionAngle, playerVelocity } = this._getMoveParams(event.payload.x, event.payload.y, playerSize);
@@ -29,12 +28,15 @@ export class WidgetsBoardCursorMovedEventHandler implements ApplicationEventHand
         const newPlayerY = this._getNewY(playerY, directionAngle, playerVelocity);
 
         commandBus.dispatch(
-            new WidgetsPlayerMoveCommand({
-                x: newPlayerX,
-                y: newPlayerY,
-                playerId: userName as uuid,
-                playerSize,
-            }),
+            new WidgetsPlayerMoveCommand(
+                {
+                    x: newPlayerX,
+                    y: newPlayerY,
+                    userName: userName as string,
+                    playerSize,
+                },
+                false,
+            ),
         );
     }
 

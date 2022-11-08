@@ -11,35 +11,34 @@ export enum ServerToClientMessage {
 }
 
 export type NewPlayerToClientPayload = {
-    socketData: {
-        playerId: string;
-    };
+    userName: string;
+    position: { x: number; y: number };
+    size: number;
+    color: number;
 };
 
 export type MovePlayerToClientPayload = {
-    socketData: {
-        playerId: string;
-        playerTransform: { x: number; y: number };
-        playerSize: number;
-    };
+    userName: string;
+    playerTransform: { x: number; y: number };
+    playerSize: number;
 };
 
 export type GrowPlayerToClientPayload = {
-    socketData: {
-        playerId: string;
-        playerSize: number;
-    };
+    userName: string;
+    playerSize: number;
 };
 
 export type RemovePlayerToClientPayload = {
-    socketData: {
-        playerId: string;
-    };
+    userName: string;
 };
 
+export type NewPlayerToServerPayload = NewPlayerToClientPayload;
+
+export type MovePlayerToServerPayload = MovePlayerToClientPayload;
+
 export type ClientToServerPayloads = {
-    [ClientToServerMessage.NewPlayerToServer]: NewPlayerToClientPayload['socketData'];
-    [ClientToServerMessage.MovePlayerToServer]: MovePlayerToClientPayload['socketData'];
+    [ClientToServerMessage.NewPlayerToServer]: NewPlayerToServerPayload;
+    [ClientToServerMessage.MovePlayerToServer]: MovePlayerToServerPayload;
 };
 
 export type ServerToClientPayloads = {
