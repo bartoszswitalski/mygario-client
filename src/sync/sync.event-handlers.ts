@@ -16,7 +16,7 @@ const eventProviders = [
     },
     {
         provide: WEBSOCKET_SERVICE_URL,
-        useValue: 'http://localhost:3001/',
+        useValue: process.env.REACT_APP_BACKEND ?? 'http://localhost:3001/',
     },
 ];
 
