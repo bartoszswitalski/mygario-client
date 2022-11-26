@@ -1,17 +1,13 @@
+import { ChakraProvider } from '@chakra-ui/react';
+import axios from 'axios';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from 'App';
-import { DependenciesProvider } from 'infrastructure/injection';
-import {
-    APPLICATION_EVENT_HANDLERS_REGISTRY,
-    ApplicationEventHandlersRegistry,
-    COMMAND_HANDLERS_REGISTRY,
-    CommandHandlersRegistry,
-} from 'infrastructure/eda';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import axios from 'axios';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import 'reflect-metadata';
+import { App } from 'src/App';
+import { dependenciesContainer } from 'src/infrastructure/injection/inversify.config';
+import { InversifyProvider } from 'src/infrastructure/injection/use-injection';
 
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND ?? 'http://localhost:3001/';
 
@@ -35,20 +31,9 @@ const MygarioApp = () => {
 
 const AppWithProviders = () => {
     return (
-        <DependenciesProvider
-            providers={[
-                {
-                    provide: APPLICATION_EVENT_HANDLERS_REGISTRY,
-                    useValue: new ApplicationEventHandlersRegistry(),
-                },
-                {
-                    provide: COMMAND_HANDLERS_REGISTRY,
-                    useValue: new CommandHandlersRegistry(),
-                },
-            ]}
-        >
+        <InversifyProvider dependenciesContainer={dependenciesContainer}>
             <App />
-        </DependenciesProvider>
+        </InversifyProvider>
     );
 };
 
