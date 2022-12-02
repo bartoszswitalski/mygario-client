@@ -15,6 +15,7 @@ import {
 } from 'src/common/models/sync/websocket-service.model';
 import { syncService } from 'src/common/services/sync/sync.service';
 import { AUTH_STATE, AuthState } from 'src/common/states/auth.state';
+import { CURSOR_STATE, CursorState } from 'src/common/states/cursor.state';
 import { switchCase } from 'src/common/utils/utils';
 import { ApplicationDispatcher, Dispatcher } from 'src/infrastructure/eda';
 import { APPLICATION_DISPATCHER } from 'src/infrastructure/eda/dispatcher/dispatcher';
@@ -70,6 +71,7 @@ dependenciesContainer.bind<WebsocketService>(WEBSOCKET_SERVICE).toConstantValue(
 
 // common states
 dependenciesContainer.bind<AuthState>(AUTH_STATE).to(AuthState);
+dependenciesContainer.bind<CursorState>(CURSOR_STATE).to(CursorState);
 
 // widgets states
 dependenciesContainer.bind<ComponentDataState>(COMPONENT_DATA_STATE).to(ComponentDataState);

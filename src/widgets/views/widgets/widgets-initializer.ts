@@ -1,13 +1,19 @@
 import { useEffect } from 'react';
-import { takeUntil } from 'rxjs';
+import { takeUntil, withLatestFrom } from 'rxjs';
 import type { Camera } from 'src/camera/models';
 import { APPLICATION_CAMERA } from 'src/camera/models';
 import { AUTH_STATE, AuthState } from 'src/common/states/auth.state';
+import { CURSOR_STATE, CursorState } from 'src/common/states/cursor.state';
 import { uuid } from 'src/core/types/uuid';
 import { useInjection } from 'src/infrastructure/injection/use-injection';
 import type { PixiCanvasApplication } from 'src/pixi/models';
 import { PIXI_APP } from 'src/pixi/models';
-import { ADD_NEW_PLAYER_ACTION_CREATOR, AddNewPlayerActionCreator } from 'src/widgets/action-creators';
+import {
+    ADD_NEW_PLAYER_ACTION_CREATOR,
+    AddNewPlayerActionCreator,
+    MOVE_PLAYER_ACTION_CREATOR,
+    MovePlayerActionCreator,
+} from 'src/widgets/action-creators';
 import {
     COMPONENT_DATA_STATE,
     ComponentDataState,
@@ -15,13 +21,21 @@ import {
     WidgetsStorageState,
 } from 'src/widgets/states';
 
-export const useWidgetInitializer = (): void => {
+export const useWidgetsInitializer = (): void => {
+    const BASE_VELOCITY = 5;
+    const DELTA_VELOCITY = 0.03;
+    const VELOCITY_BORDER_RADIUS_MULTIPLE = 3;
+
     const widgetsStorageState = useInjection<WidgetsStorageState>(WIDGETS_STORAGE_STATE);
     const componentDataState = useInjection<ComponentDataState>(COMPONENT_DATA_STATE);
     const authState = useInjection<AuthState>(AUTH_STATE);
+    const cursorState = useInjection<CursorState>(CURSOR_STATE);
+
     const pixiApp = useInjection<PixiCanvasApplication>(PIXI_APP);
     const camera = useInjection<Camera>(APPLICATION_CAMERA);
+
     const addNewPlayerActionCreator = useInjection<AddNewPlayerActionCreator>(ADD_NEW_PLAYER_ACTION_CREATOR);
+    const movePlayerActionCreator = useInjection<MovePlayerActionCreator>(MOVE_PLAYER_ACTION_CREATOR);
 
     useEffect(() => {
         _observeWidgetAdded();
@@ -45,16 +59,62 @@ export const useWidgetInitializer = (): void => {
             .subscribe((credentials) => {
                 const widgetId = credentials.userName;
                 addNewPlayerActionCreator.create(widgetId, 0, 0, 10, 0x00ff00);
-                _cameraFollowWidget(widgetId);
+                _cameraFollowPlayer(widgetId);
+                _playerFollowCursor(widgetId);
             });
     };
 
-    const _cameraFollowWidget = (widgetId: uuid): void => {
+    const _cameraFollowPlayer = (widgetId: uuid): void => {
         componentDataState
             .transform$(widgetId)
             .pipe(takeUntil(widgetsStorageState.widgetsDisposed$()))
             .subscribe((transform) => {
                 camera.setPosition(transform.x, transform.y, 1);
             });
+    };
+
+    const _playerFollowCursor = (widgetId: uuid): void => {
+        cursorState
+            .cursorCoords$()
+            .pipe(
+                takeUntil(widgetsStorageState.widgetsDisposed$()),
+                withLatestFrom(componentDataState.size$(widgetId), componentDataState.transform$(widgetId)),
+            )
+            .subscribe(([cursorCoords, { size: playerSize }, playerCoords]) => {
+                const { directionAngle, playerVelocity } = _getMoveParams(cursorCoords.x, cursorCoords.y, playerSize);
+                const newPlayerX = _getNewX(playerCoords.x, directionAngle, playerVelocity);
+                const newPlayerY = _getNewY(playerCoords.y, directionAngle, playerVelocity);
+
+                movePlayerActionCreator.create(widgetId, newPlayerX, newPlayerY, playerSize);
+            });
+    };
+
+    const _getMoveParams = (
+        cursorX: number,
+        cursorY: number,
+        playerSize: number,
+    ): { directionAngle: number; playerVelocity: number } => {
+        const { width: viewportWidth, height: viewportHeight } = pixiApp.renderer;
+        const deltaX = cursorX - viewportWidth / 2;
+        const deltaY = cursorY - viewportHeight / 2;
+
+        const directionAngle = Math.atan2(deltaY, deltaX);
+        const playerVelocity = _getPlayerVelocity(deltaX, deltaY, playerSize);
+        return { directionAngle, playerVelocity };
+    };
+
+    const _getPlayerVelocity = (deltaX: number, deltaY: number, playerSize: number): number => {
+        const cursorDistance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
+        const absoluteVelocity = BASE_VELOCITY - playerSize * DELTA_VELOCITY;
+        const cursorPositionSlowFactor = Math.min(1, cursorDistance / (playerSize * VELOCITY_BORDER_RADIUS_MULTIPLE));
+        return absoluteVelocity * cursorPositionSlowFactor;
+    };
+
+    const _getNewX = (oldX: number, directionAngle: number, playerVelocity: number): number => {
+        return oldX + Math.cos(directionAngle) * playerVelocity;
+    };
+
+    const _getNewY = (oldY: number, directionAngle: number, playerVelocity: number): number => {
+        return oldY + Math.sin(directionAngle) * playerVelocity;
     };
 };
