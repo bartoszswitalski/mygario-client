@@ -18,6 +18,7 @@ import { AUTH_STATE, AuthState } from 'src/common/states/auth.state';
 import { CURSOR_STATE, CursorState } from 'src/common/states/cursor.state';
 import { switchCase } from 'src/common/utils/utils';
 import { ApplicationDispatcher, Dispatcher } from 'src/infrastructure/eda';
+import { ActionCreator } from 'src/infrastructure/eda/action-creator/action-creator.model';
 import { APPLICATION_DISPATCHER } from 'src/infrastructure/eda/dispatcher/dispatcher';
 import { X_MAX, X_MIN, Y_MAX, Y_MIN } from 'src/pixi';
 import { BOARD_CONSTRAINTS, BoardConstraints, PIXI_APP, PixiCanvasApplication } from 'src/pixi/models';
@@ -36,7 +37,9 @@ import {
     RemovePlayerActionCreator,
 } from 'src/widgets/action-creators';
 import { RenderableFeature, Widget, WidgetFeature } from 'src/widgets/models/widget';
+import { FEATURES_FACTORY } from 'src/widgets/models/widget/feature.model';
 import { WIDGETS_FACTORY, WidgetsFactory } from 'src/widgets/models/widgets-factory';
+import { SYNC_ACTION_CREATORS_FACTORY } from 'src/widgets/services/sync.listeners';
 import {
     COMPONENT_DATA_STATE,
     ComponentDataState,
@@ -85,6 +88,20 @@ dependenciesContainer.bind<BoardConstraints>(BOARD_CONSTRAINTS).toConstantValue(
     yMax: Y_MAX,
 });
 
+// features factory
+dependenciesContainer
+    .bind<interfaces.Factory<RenderableFeature>>(FEATURES_FACTORY)
+    .toFactory<RenderableFeature, [WidgetFeature], [Widget]>((context: interfaces.Context) => {
+        return (feature) => (widget) => {
+            const componentDataState = context.container.get<ComponentDataState>(COMPONENT_DATA_STATE);
+            return switchCase({
+                [WidgetFeature.Transform]: new TransformFeature(widget, componentDataState),
+                [WidgetFeature.ZIndex]: new ZIndexFeature(widget, componentDataState),
+                [WidgetFeature.Pellet]: new PelletFeature(widget, componentDataState),
+            })(feature);
+        };
+    });
+
 // widgets factory
 dependenciesContainer.bind<WidgetsFactory>(WIDGETS_FACTORY).to(WidgetsFactory);
 
@@ -103,15 +120,19 @@ dependenciesContainer.bind<GrowPlayerActionCreator>(GROW_PLAYER_ACTION_CREATOR).
 dependenciesContainer.bind<MovePlayerActionCreator>(MOVE_PLAYER_ACTION_CREATOR).to(MovePlayerActionCreator);
 
 dependenciesContainer
-    .bind<interfaces.Factory<RenderableFeature>>('FEATURES_FACTORY')
-    .toFactory<RenderableFeature, [WidgetFeature], [Widget]>((context: interfaces.Context) => {
-        return (feature) => (widget) => {
-            const componentDataState = context.container.get<ComponentDataState>(COMPONENT_DATA_STATE);
+    .bind<interfaces.Factory<ActionCreator>>(SYNC_ACTION_CREATORS_FACTORY)
+    .toFactory<ActionCreator, [string]>((context: interfaces.Context) => {
+        return (actionCreator) => {
             return switchCase({
-                [WidgetFeature.Transform]: new TransformFeature(widget, componentDataState),
-                [WidgetFeature.ZIndex]: new ZIndexFeature(widget, componentDataState),
-                [WidgetFeature.Pellet]: new PelletFeature(widget, componentDataState),
-            })(feature);
+                [ADD_NEW_PLAYER_ACTION_CREATOR]:
+                    context.container.get<AddNewPlayerActionCreator>(ADD_NEW_PLAYER_ACTION_CREATOR),
+                [MOVE_PLAYER_ACTION_CREATOR]:
+                    context.container.get<MovePlayerActionCreator>(MOVE_PLAYER_ACTION_CREATOR),
+                [GROW_PLAYER_ACTION_CREATOR]:
+                    context.container.get<GrowPlayerActionCreator>(GROW_PLAYER_ACTION_CREATOR),
+                [REMOVE_PLAYER_ACTION_CREATOR]:
+                    context.container.get<RemovePlayerActionCreator>(REMOVE_PLAYER_ACTION_CREATOR),
+            })(actionCreator) as ActionCreator;
         };
     });
 

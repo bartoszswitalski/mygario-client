@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { takeUntil, withLatestFrom } from 'rxjs';
 import type { Camera } from 'src/camera/models';
 import { APPLICATION_CAMERA } from 'src/camera/models';
+import { ClientToServerMessage, WEBSOCKET_SERVICE, WebsocketService } from 'src/common/models/sync';
 import { AUTH_STATE, AuthState } from 'src/common/states/auth.state';
 import { CURSOR_STATE, CursorState } from 'src/common/states/cursor.state';
 import { uuid } from 'src/core/types/uuid';
@@ -37,6 +38,8 @@ export const useWidgetsInitializer = (): void => {
     const addNewPlayerActionCreator = useInjection<AddNewPlayerActionCreator>(ADD_NEW_PLAYER_ACTION_CREATOR);
     const movePlayerActionCreator = useInjection<MovePlayerActionCreator>(MOVE_PLAYER_ACTION_CREATOR);
 
+    const websocketService = useInjection<WebsocketService>(WEBSOCKET_SERVICE);
+
     useEffect(() => {
         _observeWidgetAdded();
         _observeUserLoggedIn();
@@ -58,9 +61,10 @@ export const useWidgetsInitializer = (): void => {
             .pipe(takeUntil(widgetsStorageState.widgetsDisposed$()))
             .subscribe((credentials) => {
                 const widgetId = credentials.userName;
-                addNewPlayerActionCreator.create(widgetId, 0, 0, 10, 0x00ff00);
+                addNewPlayerActionCreator.create(widgetId, 0, 0, 50, 0x00ff00);
                 _cameraFollowPlayer(widgetId);
                 _playerFollowCursor(widgetId);
+                _syncPlayerMove(widgetId);
             });
     };
 
@@ -82,9 +86,8 @@ export const useWidgetsInitializer = (): void => {
             )
             .subscribe(([cursorCoords, { size: playerSize }, playerCoords]) => {
                 const { directionAngle, playerVelocity } = _getMoveParams(cursorCoords.x, cursorCoords.y, playerSize);
-                const newPlayerX = _getNewX(playerCoords.x, directionAngle, playerVelocity);
-                const newPlayerY = _getNewY(playerCoords.y, directionAngle, playerVelocity);
-
+                const newPlayerX = playerCoords.x + Math.cos(directionAngle) * playerVelocity;
+                const newPlayerY = playerCoords.y + Math.sin(directionAngle) * playerVelocity;
                 movePlayerActionCreator.create(widgetId, newPlayerX, newPlayerY, playerSize);
             });
     };
@@ -110,11 +113,16 @@ export const useWidgetsInitializer = (): void => {
         return absoluteVelocity * cursorPositionSlowFactor;
     };
 
-    const _getNewX = (oldX: number, directionAngle: number, playerVelocity: number): number => {
-        return oldX + Math.cos(directionAngle) * playerVelocity;
-    };
-
-    const _getNewY = (oldY: number, directionAngle: number, playerVelocity: number): number => {
-        return oldY + Math.sin(directionAngle) * playerVelocity;
+    const _syncPlayerMove = (widgetId: uuid): void => {
+        componentDataState
+            .transform$(widgetId)
+            .pipe(takeUntil(widgetsStorageState.widgetsDisposed$()), withLatestFrom(componentDataState.size$(widgetId)))
+            .subscribe(([transform, { size }]) => {
+                websocketService.sendMessage(ClientToServerMessage.MovePlayerToServer, {
+                    userName: widgetId,
+                    playerTransform: transform,
+                    playerSize: size,
+                });
+            });
     };
 };

@@ -4,20 +4,21 @@ import { WidgetType } from 'src/core/types/widget-type';
 import { Blueprint } from 'src/widgets/models/blueprint/blueprint.model';
 import { pelletInitActions } from 'src/widgets/models/init-actions/pellet.init-actions';
 import { RawWidgetData, RenderableFeature, Widget, WidgetFeature } from 'src/widgets/models/widget';
+import { FEATURES_FACTORY } from 'src/widgets/models/widget/feature.model';
 
 @injectable()
 export class WidgetsFactory {
-    constructor(
-        @inject('FEATURES_FACTORY')
-        private readonly _featuresFactory: (feature: WidgetFeature) => (widget: Widget) => RenderableFeature,
-    ) {}
-
     readonly #widgetsFeatures: Map<WidgetType, ((widget: Widget) => RenderableFeature)[]> = new Map([
         [
             WidgetType.Pellet,
             [WidgetFeature.Transform, WidgetFeature.Pellet, WidgetFeature.ZIndex].map(this._featuresFactory),
         ],
     ]);
+
+    constructor(
+        @inject(FEATURES_FACTORY)
+        private readonly _featuresFactory: (feature: WidgetFeature) => (widget: Widget) => RenderableFeature,
+    ) {}
 
     fromRaw(rawWidget: RawWidgetData): Blueprint {
         return switchCase({

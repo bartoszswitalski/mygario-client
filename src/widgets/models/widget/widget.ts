@@ -1,7 +1,7 @@
 import { Container } from 'pixi.js';
 import { Observable, Subject } from 'rxjs';
 import type { uuid } from 'src/core/types/uuid';
-import { RenderableFeature } from 'src/widgets/models/widget/widget.model';
+import { RenderableFeature } from 'src/widgets/models/widget/feature.model';
 
 export class Widget {
     public container: Container = new Container();
@@ -16,6 +16,10 @@ export class Widget {
         this.container.cullable = true;
     }
 
+    get destroy$(): Observable<boolean> {
+        return this.#destroy.asObservable();
+    }
+
     render(): void {
         this.#features.forEach((feature) => feature.render());
     }
@@ -23,9 +27,5 @@ export class Widget {
     destroy(): void {
         this.container.destroy();
         this.#destroy.next(true);
-    }
-
-    get destroy$(): Observable<boolean> {
-        return this.#destroy.asObservable();
     }
 }

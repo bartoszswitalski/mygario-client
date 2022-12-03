@@ -6,13 +6,15 @@ import { createSyncService } from 'src/common/services/sync/sync.service';
 import { ActionCreator } from 'src/infrastructure/eda/action-creator/action-creator.model';
 import { APPLICATION_DISPATCHER } from 'src/infrastructure/eda/dispatcher/dispatcher';
 import type { Dispatcher } from 'src/infrastructure/eda/dispatcher/dispatcher.model';
-import { listenSyncMessages } from 'src/widgets/services/sync.listeners';
+import { listenSyncMessages, SYNC_ACTION_CREATORS_FACTORY } from 'src/widgets/services/sync.listeners';
 
 @injectable()
 export class AuthActionCreator implements ActionCreator {
     constructor(
         @inject(APPLICATION_DISPATCHER) private readonly _dispatcher: Dispatcher,
         @inject(WEBSOCKET_SERVICE_URL) private readonly _websocketServiceUrl: string,
+        @inject(SYNC_ACTION_CREATORS_FACTORY)
+        private readonly _syncActionCreatorsFactory: (symbol: symbol) => ActionCreator,
     ) {}
 
     create(userName: string): void {
@@ -22,7 +24,7 @@ export class AuthActionCreator implements ActionCreator {
 
             // todo: consider moving this elsewhere
             createSyncService(token, this._websocketServiceUrl);
-            listenSyncMessages();
+            listenSyncMessages(this._syncActionCreatorsFactory);
         });
     }
 }

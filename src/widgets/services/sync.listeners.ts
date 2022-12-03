@@ -6,56 +6,72 @@ import {
     ServerToClientMessage,
 } from 'src/common/models/sync';
 import { syncService } from 'src/common/services/sync/sync.service';
-import { useInjection } from 'src/infrastructure/injection/use-injection';
+import { ActionCreator } from 'src/infrastructure/eda/action-creator/action-creator.model';
 import {
+    ADD_NEW_PLAYER_ACTION_CREATOR,
     GROW_PLAYER_ACTION_CREATOR,
-    GrowPlayerActionCreator,
-} from 'src/widgets/action-creators/widgets-grow-player.action-creator';
-import {
     MOVE_PLAYER_ACTION_CREATOR,
-    MovePlayerActionCreator,
-} from 'src/widgets/action-creators/widgets-move-player.action-creator';
-import {
     REMOVE_PLAYER_ACTION_CREATOR,
-    RemovePlayerActionCreator,
-} from 'src/widgets/action-creators/widgets-remove-player.action-creator';
+} from 'src/widgets/action-creators';
 
-export const listenSyncMessages = (): void => {
-    syncService.addMessageListener(ServerToClientMessage.NewPlayerToClient, handleNewPlayer);
-    syncService.addMessageListener(ServerToClientMessage.MovePlayerToClient, handleMovePlayer);
-    syncService.addMessageListener(ServerToClientMessage.GrowPlayerToClient, handleGrowPlayer);
-    syncService.addMessageListener(ServerToClientMessage.RemovePlayerToClient, handleRemovePlayer);
+export const SYNC_ACTION_CREATORS_FACTORY = Symbol('SYNC_MESSAGES_ACTION_CREATORS_FACTORY');
+
+export const listenSyncMessages = (actionCreatorsFactory: (symbol: symbol) => ActionCreator): void => {
+    syncService.addMessageListener(
+        ServerToClientMessage.NewPlayerToClient,
+        handleNewPlayer(actionCreatorsFactory(ADD_NEW_PLAYER_ACTION_CREATOR)),
+    );
+    syncService.addMessageListener(
+        ServerToClientMessage.MovePlayerToClient,
+        handleMovePlayer(actionCreatorsFactory(MOVE_PLAYER_ACTION_CREATOR)),
+    );
+    syncService.addMessageListener(
+        ServerToClientMessage.GrowPlayerToClient,
+        handleGrowPlayer(actionCreatorsFactory(GROW_PLAYER_ACTION_CREATOR)),
+    );
+    syncService.addMessageListener(
+        ServerToClientMessage.RemovePlayerToClient,
+        handleRemovePlayer(actionCreatorsFactory(REMOVE_PLAYER_ACTION_CREATOR)),
+    );
 };
 
-const handleNewPlayer = (payload: NewPlayerToClientPayload): void => {
-    const {
-        userName,
-        position: { x, y },
-        size,
-        color,
-    } = payload;
-    console.log('WS New player', payload);
-    // useInjection<AddNewPlayerActionCreator>(ADD_NEW_PLAYER_ACTION_CREATOR).create(userName, x, y, size, color);
-};
+const handleNewPlayer =
+    (actionCreator: ActionCreator) =>
+    (payload: NewPlayerToClientPayload): void => {
+        const {
+            userName,
+            position: { x, y },
+            size,
+            color,
+        } = payload;
+        console.log('WS New player', payload);
+        actionCreator.create(userName, x, y, size, color);
+    };
 
-const handleMovePlayer = (payload: MovePlayerToClientPayload): void => {
-    const {
-        userName,
-        playerTransform: { x, y },
-        playerSize,
-    } = payload;
-    console.log('WS Move player', userName, x, y, playerSize);
-    useInjection<MovePlayerActionCreator>(MOVE_PLAYER_ACTION_CREATOR).create(userName, x, y, playerSize);
-};
+const handleMovePlayer =
+    (actionCreator: ActionCreator) =>
+    (payload: MovePlayerToClientPayload): void => {
+        const {
+            userName,
+            playerTransform: { x, y },
+            playerSize,
+        } = payload;
+        console.log('WS Move player', userName, x, y, playerSize);
+        actionCreator.create(userName, x, y, playerSize);
+    };
 
-const handleGrowPlayer = (payload: GrowPlayerToClientPayload): void => {
-    const { userName, playerSize } = payload;
-    console.log('WS Grow player', userName, playerSize);
-    useInjection<GrowPlayerActionCreator>(GROW_PLAYER_ACTION_CREATOR).create(userName, playerSize);
-};
+const handleGrowPlayer =
+    (actionCreator: ActionCreator) =>
+    (payload: GrowPlayerToClientPayload): void => {
+        const { userName, playerSize } = payload;
+        console.log('WS Grow player', userName, playerSize);
+        actionCreator.create(userName, playerSize);
+    };
 
-const handleRemovePlayer = (payload: RemovePlayerToClientPayload): void => {
-    const { userName } = payload;
-    console.log('WS Remove player', userName);
-    useInjection<RemovePlayerActionCreator>(REMOVE_PLAYER_ACTION_CREATOR).create(userName);
-};
+const handleRemovePlayer =
+    (actionCreator: ActionCreator) =>
+    (payload: RemovePlayerToClientPayload): void => {
+        const { userName } = payload;
+        console.log('WS Remove player', userName);
+        actionCreator.create(userName);
+    };
