@@ -1,4 +1,4 @@
-import { ClientToServerMessage, ClientToServerPayloads } from 'src/common/models/sync';
+import { ClientToServerMessage, ClientToServerPayloads } from 'src/widgets/models/sync/index';
 
 export interface WebsocketService {
     sendMessage: <T extends ClientToServerMessage>(messageType: T, messagePayload: ClientToServerPayloads[T]) => void;

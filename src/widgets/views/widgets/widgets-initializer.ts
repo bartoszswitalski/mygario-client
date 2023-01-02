@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { takeUntil, withLatestFrom } from 'rxjs';
 import type { Camera } from 'src/camera/models';
 import { APPLICATION_CAMERA } from 'src/camera/models';
-import { ClientToServerMessage, WEBSOCKET_SERVICE, WebsocketService } from 'src/common/models/sync';
 import { AUTH_STATE, AuthState } from 'src/common/states/auth.state';
 import { CURSOR_STATE, CursorState } from 'src/common/states/cursor.state';
 import { uuid } from 'src/core/types/uuid';
@@ -15,6 +14,7 @@ import {
     MOVE_PLAYER_ACTION_CREATOR,
     MovePlayerActionCreator,
 } from 'src/widgets/action-creators';
+import { ClientToServerMessage, WEBSOCKET_SERVICE, WebsocketService } from 'src/widgets/models/sync';
 import {
     COMPONENT_DATA_STATE,
     ComponentDataState,
@@ -118,6 +118,7 @@ export const useWidgetsInitializer = (): void => {
             .transform$(widgetId)
             .pipe(takeUntil(widgetsStorageState.widgetsDisposed$()), withLatestFrom(componentDataState.size$(widgetId)))
             .subscribe(([transform, { size }]) => {
+                console.log('move player to server');
                 websocketService.sendMessage(ClientToServerMessage.MovePlayerToServer, {
                     userName: widgetId,
                     playerTransform: transform,

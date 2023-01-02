@@ -1,11 +1,3 @@
-import {
-    GrowPlayerToClientPayload,
-    MovePlayerToClientPayload,
-    NewPlayerToClientPayload,
-    RemovePlayerToClientPayload,
-    ServerToClientMessage,
-} from 'src/common/models/sync';
-import { syncService } from 'src/common/services/sync/sync.service';
 import { ActionCreator } from 'src/infrastructure/eda/action-creator/action-creator.model';
 import {
     ADD_NEW_PLAYER_ACTION_CREATOR,
@@ -13,10 +5,22 @@ import {
     MOVE_PLAYER_ACTION_CREATOR,
     REMOVE_PLAYER_ACTION_CREATOR,
 } from 'src/widgets/action-creators';
+import {
+    GrowPlayerToClientPayload,
+    MovePlayerToClientPayload,
+    NewPlayerToClientPayload,
+    RemovePlayerToClientPayload,
+    ServerToClientMessage,
+    SyncService,
+} from 'src/widgets/models/sync';
 
 export const SYNC_ACTION_CREATORS_FACTORY = Symbol('SYNC_MESSAGES_ACTION_CREATORS_FACTORY');
 
-export const listenSyncMessages = (actionCreatorsFactory: (symbol: symbol) => ActionCreator): void => {
+export const listenSyncMessages = (
+    syncService: SyncService,
+    actionCreatorsFactory: (symbol: symbol) => ActionCreator,
+): void => {
+    console.log('Listen sync messages');
     syncService.addMessageListener(
         ServerToClientMessage.NewPlayerToClient,
         handleNewPlayer(actionCreatorsFactory(ADD_NEW_PLAYER_ACTION_CREATOR)),
